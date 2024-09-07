@@ -1,4 +1,3 @@
-local lastVehicle = nil
 local myStats = {
     hunger = 100,
     thirst = 100
