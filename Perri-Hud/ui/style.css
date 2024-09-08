@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+* {
+    text-shadow: 0 0 .3vw black;
+    font-size: .6vw;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    overflow: hidden;
+}
+
+.container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    
+    right: 1%;
+    bottom: 15%;
+    gap: .4vw;
+}
+
+
+.trabajos {
+    padding: .3vw;
+    box-shadow: 0 0 .3vw  rgb(2, 2, 2);
+    background: rgba(0, 0, 0, 0.432);
+
+    border-radius: .4vw;    
+    color: white;
+}
+
+span {
+    margin-left: .6vw;
+}
+
+.container-status {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    bottom: 3%;
+    gap: .3vw;
+    left: .5%;
+}
+
+.vidas {
+    position: relative;
+    display: flex;
+    justify-content: center; 
+
+
+    border-radius: .3vw;
+    box-shadow: 0 0 .3vw rgb(2, 2, 2);
+    
+    background: rgba(0, 0, 0, 0.432);
+    gap: 1vw;
+    width: 1.6vw;
+    
+    height: 1.4vw;
+}
+
+
+.dentro {
+    width: 100%;
+    height: 100%;
+    bottom: 0%;
+    transition: all .3s;
+
+    background: rgba(8, 136, 221, 0.788);
+    border-radius: .3vw;
+    display: flex;
+
+    flex-direction: column;
+    position: absolute; 
+    z-index: 1; 
+}
+
+
+.vidas > .vida {
+    display: flex;;
+    align-items: center;
+}
+
+.vida {
+    z-index: 2; 
+    text-shadow: .1vw .2vw .3vw rgba(0, 0, 0, 0.685);
+    font-size: .75vw;    
+}
+
+
+
+.info {
+    font-weight: bold;
+    position: absolute;
+    display: flex;
+
+    flex-direction: row;
+    gap: .3vw;
+    right: 1%;
+
+    gap: .50vw;
+    margin-bottom: 1vw;
+    top: 15%;
+}
+
+img {
+    position: absolute;
+    right: 5%;
+    
+    bottom: 4.5vw;
+    width: 6vw;
+    height: 3.5vw;
+}
+
+
+
+.dinero {
+    background: rgba(0, 0, 0, 0.432);
+    width: auto;
+    height: 1.5vw;
+    padding: .0vw .3vw .0vw .3vw;
+
+    border-radius: .3vw;
+    box-shadow: 0 0 .3vw rgb(2, 2, 2);
+
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+
+.dinero > i, .dinero > span {
+    font-size: .6vw;
+    font-weight: bold;
+
+}
+
+.dinero > i {
+    margin-top: .1vw;
+}
+
+
+.trabajo  {
+    
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    
+    top: -3vw;
+    right: 1%;
+    align-items: center;
+    
+    gap: .3vw;
+    white-space: nowrap; 
+}
+
+.trabajo > .fa-toolbox {
+    color: blue;
+    font-size: 1.2vw;
+}
+
+.trabajo > p {
+    font-size: 1vw;
+    font-weight: bolder;
+    text-shadow: 0 0 .3vw black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.id {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+
+    right: 0%;
+    margin-top: 2vw;
+
+    font-weight: bold;
+    
+}
+
+.voz {
+    position: absolute;
+    right: 1%;
+    bottom: 3.2%;
+
+
+
+    display: flex;
+    gap: .5vw;
+}
+
+.mic {
+    background: rgba(0, 0, 0, 0.432);
+
+
+    border-radius: .3vw;
+    box-shadow: 0 0 .3vw rgb(2, 2, 2);
+    padding: .4vw;
+}
+
+
+/* 
+
+@font-face {
+    font-family: 'defcon';
+    src: url('img/Meutas-SemiBoldOblique.otf');
+}
+
+.defcon {
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+.defcon > p, p > span {
+    font-family: defcon;
+    font-size: .6vw;
+}
+
+.defcon > p {
+    background: #676767;
+    padding: .4vw;
+    padding-right: 0;
+    border-radius: .3vw;
+}
+
+p > span {
+    background: #505050;
+    width: 100%;
+    height: 100%;
+
+    padding: .5vw;
+    border-top-right-radius: .3vw;
+    border-bottom-right-radius: .3vw;
+
+}
+ */
