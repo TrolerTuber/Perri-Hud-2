@@ -19,6 +19,11 @@ case 'load':
     }
     break;
 
+    case 'microfono':
+        let hablando = data.hablando;
+        let habla = (hablando) ? $('#hablando2').html('<i class="fa-solid fa-microphone"></i>') : $('#hablando2').html(`<i class="fa-solid fa-microphone-slash"></i>`);    
+    break;
+
 case 'update':
     for (let i = 1; i < data.jobs.length; i++) {
         let job = data.jobs[i];
