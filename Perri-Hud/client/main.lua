@@ -10,8 +10,7 @@ function startthread()
 
         while true do
             local msec = 500
-            local player = PlayerId()
-            local isTalking = NetworkIsPlayerTalking(player)
+            local isTalking = NetworkIsPlayerTalking(cache.playerId)
             local PlayerData = ESX.PlayerData
 
             if isTalking then
@@ -31,7 +30,6 @@ function startthread()
                 end
             end
 
-            local ped = PlayerPedId()
 
             for i=1, #PlayerData.accounts do
                 accounts[PlayerData.accounts[i].name] = PlayerData.accounts[i]
@@ -39,23 +37,18 @@ function startthread()
             
             SendNUIMessage({
                 action = 'act',
-                health = GetEntityHealth(ped) - 100,
-                armour = GetPedArmour(ped),
+                health = GetEntityHealth(cache.ped) - 100,
+                armour = GetPedArmour(cache.ped),
                 hunger = myStats.hunger,
                 thirst = myStats.thirst,
-                stamina = (100 - GetPlayerSprintStaminaRemaining(player)),
+                stamina = (100 - GetPlayerSprintStaminaRemaining(cache.playerId)),
                 job_label = PlayerData.job.label,
                 job_grade_label = PlayerData.job.grade_name,
-                id = GetPlayerServerId(player),
+                id = cache.serverId,
                 accounts = accounts,
                 anchor = GetMinimapAnchor(),
 
-                -- COLORES (No me mateis por meterlo en el bucle xd, me daba pereza)
-                colorvida = Config.Colors.Health,
-                colorcomida = Config.Colors.Hunger,
-                colorbebida = Config.Colors.Thirst,
-                colorarmadura = Config.Colors.Armour,
-                colorestamina = Config.Colors.Stamina,
+
             })
 
             if IsRadarEnabled() then
@@ -73,6 +66,20 @@ function startthread()
             Wait(msec)
         end
     end)
+end
+
+function updatecolors()
+    SendNUIMessage({
+        action = 'updatecolors',
+        colorvida = Config.Colors.Health,
+        colorcomida = Config.Colors.Hunger,
+        colorbebida = Config.Colors.Thirst,
+        colorarmadura = Config.Colors.Armour,
+        colorestamina = Config.Colors.Stamina,    
+        colormicrophone = Config.Colors.Microphone
+        
+    })
+
 end
 
 local hud = false
@@ -121,6 +128,8 @@ RegisterNetEvent('esx:playerLoaded', function()
         })
 
         startthread()
+        updatecolors()
+
         spawn = true
         print('a')
     end
@@ -155,7 +164,7 @@ CreateThread(function()
     while true do
         Wait(700)
 
-        if NetworkIsPlayerActive(PlayerId()) then
+        if NetworkIsPlayerActive(cache.playerId) then
             TriggerServerEvent('Perri_OnlineJobs:server:load')
             break
         end
