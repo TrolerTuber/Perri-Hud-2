@@ -21,7 +21,7 @@ case 'load':
 
     case 'microfono':
         let hablando = data.hablando;
-        let habla = (hablando) ? $('#hablando2').html('<i class="fa-solid fa-microphone"></i>') : $('#hablando2').html(`<i class="fa-solid fa-microphone-slash"></i>`);    
+        let habla = (hablando) ? $('#hablando').html('<i class="fa-solid fa-microphone"></i>') : $('#hablando').html(`<i class="fa-solid fa-microphone-slash"></i>`);    
     break;
 
 case 'update':
@@ -44,7 +44,13 @@ case 'mapasi':
         easing: 'easeOutElastic(.6, 1)',
     });
     break;
-
+case 'updatecolors': 
+    $("#vidaBar").css({ background: `${data.colorvida}` });
+    $("#comida").css({ background: `${data.colorcomida}` });
+    $("#bebida").css({ background: `${data.colorbebida}` });
+    $("#armadura").css({ background: `${data.colorarmadura}` });
+    $("#estamina").css({ background: `${data.colorestamina}` });    
+    break;
 case 'mapafuera':
     anime({
         targets: '.vidas',
@@ -58,11 +64,7 @@ case 'mapafuera':
     break;
 
 case 'toggle':
-    if (data.toggle) {
-        $('body').fadeOut(250);
-    } else {
-        $('body').fadeIn(250);
-    }
+    let toggle = (data.toggle) ? $('body').fadeOut(250) : $('body').fadeIn(250);
     break;
 
 case 'show':
@@ -72,7 +74,7 @@ case 'show':
 case 'act':
     $('.trabajoda').text(`${data.job_label.toUpperCase()} - ${data.job_grade_label.toUpperCase()}`);
 
-    $('#id').html('ID : ' + data.id);
+    $('#id').html(`ID: ${data.id}`);
 
     $('#blackmoney').html(formatNumber(data.accounts['black_money'].money));
     $('#dinero').html(formatNumber(data.accounts['money'].money));
@@ -80,26 +82,21 @@ case 'act':
     
     $("#vidaBar").css({
         height: Math.round(data.health) + '%',
-        background: `${data.colorvida}`,
         top: 100 - Math.round(data.health) + '%',
     });
     $("#comida").css({
         height: Math.round(data.hunger) + '%',
-        background: `${data.colorcomida}`,
         top: 100 - Math.round(data.hunger) + '%',
     });
     $("#bebida").css({
         height: Math.round(data.thirst) + '%',
-        background: `${data.colorbebida}`,
         top: 100 - Math.round(data.thirst) + '%',
     });
     $("#armadura").css({
         height: Math.round(data.armour) + '%',
-        background: `${data.colorarmadura}`,
         top: 100 - Math.round(data.armour) + '%',
     });
     $("#estamina").css({
-        background: `${data.colorestamina}`,
         height: Math.round(data.stamina) + '%',
         top: 100 - Math.round(data.stamina) + '%',
     });
@@ -120,3 +117,6 @@ case 'act':
     break;
 }
 });
+
+
+
