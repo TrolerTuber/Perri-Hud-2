@@ -4,7 +4,6 @@ local myStats = {
     thirst = 100
 }
 
-
 function startthread()
     CreateThread(function()
         local wasTalking = false
@@ -15,12 +14,21 @@ function startthread()
             local isTalking = NetworkIsPlayerTalking(player)
             local PlayerData = ESX.PlayerData
 
-            if isTalking ~= wasTalking then
+            if isTalking then
+                wasTalking = true
+                print('habla')
                 SendNUIMessage({
                     action = 'microfono',
-                    state = isTalking
+                    hablando = wasTalking 
                 })
-                wasTalking = isTalking
+            else
+                if wasTalking then
+                    wasTalking = false
+                    SendNUIMessage({
+                        action = 'microfono',
+                        hablando = wasTalking 
+                    })
+                end
             end
 
             local ped = PlayerPedId()
