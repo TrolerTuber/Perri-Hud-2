@@ -3,9 +3,6 @@ local myStats = {
     hunger = 100,
     thirst = 100
 }
-RegisterCommand('armadura', function ()
-    SetPedArmour(PlayerPedId(), 200)
-end)
 
 
 function startthread()
