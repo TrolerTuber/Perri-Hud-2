@@ -1,72 +1,55 @@
 local accounts = {}
-local myStats = {
-    hunger = 100,
-    thirst = 100
-}
+local spawn, hud = false, false
+
 
 function startthread()
     CreateThread(function()
-        local wasTalking = false
-
         while true do
-            local msec = 500
-            local isTalking = NetworkIsPlayerTalking(cache.playerId)
-            local PlayerData = ESX.PlayerData
-
-            if isTalking then
-                wasTalking = true
-                print('habla')
-                SendNUIMessage({
-                    action = 'microfono',
-                    hablando = wasTalking 
-                })
-            else
-                if wasTalking then
-                    wasTalking = false
-                    SendNUIMessage({
-                        action = 'microfono',
-                        hablando = wasTalking 
-                    })
-                end
-            end
-
-
+            local PlayerData = ESX.PlayerData       
+            local hunger, thirst 
+            TriggerEvent('esx_status:getStatus', 'hunger', function(status) 
+                hunger = status.val / 10000 
+            end)
+            TriggerEvent('esx_status:getStatus', 'thirst', function(status) 
+                thirst = status.val / 10000 
+            end)
+            
+            
             for i=1, #PlayerData.accounts do
                 accounts[PlayerData.accounts[i].name] = PlayerData.accounts[i]
             end
             
             SendNUIMessage({
                 action = 'act',
-                health = GetEntityHealth(cache.ped) - 100,
+                id = GetPlayerServerId(cache.playerId),
+                health = math.ceil(GetEntityHealth(cache.ped) - 100),
                 armour = GetPedArmour(cache.ped),
-                hunger = myStats.hunger,
-                thirst = myStats.thirst,
+                hunger = hunger,
+                thirst = thirst,
                 stamina = (100 - GetPlayerSprintStaminaRemaining(cache.playerId)),
-                job_label = PlayerData.job.label,
-                job_grade_label = PlayerData.job.grade_name,
-                id = cache.serverId,
                 accounts = accounts,
-                anchor = GetMinimapAnchor(),
-
+                hablando = NetworkIsPlayerTalking(cache.playerId)
 
             })
-
-            if IsRadarEnabled() then
-                SendNUIMessage({
-                    action = 'mapasi',
-                    anchor = GetMinimapAnchor()
-                })
-            else
-                SendNUIMessage({
-                    action = 'mapafuera',
-                    anchor = GetMinimapAnchor()
-                })
-            end
-
-            Wait(msec)
+            
+            SendNUIMessage({
+                action = 'mapasi',
+                mapa = not IsRadarHidden(),
+                anchor = GetMinimapAnchor()
+            })
+            
+            Wait(500)
         end
     end)
 end
+
+RegisterNetEvent('esx:setJob', function(job)
+    SendNUIMessage({
+        action = "job",
+        job_label = job.label,
+        job_grade_label = job.grade_label
+    })
+end)
 
 function updatecolors()
     SendNUIMessage({
@@ -79,59 +62,27 @@ function updatecolors()
         colormicrophone = Config.Colors.Microphone
         
     })
-
 end
 
-local hud = false
-
 RegisterCommand(Config.ToggleHudCommand, function()
-    if hud then
-        SendNUIMessage({
-            action = 'toggle',
-            toggle = false
-        })
-        hud = false
-    else
-        SendNUIMessage({
-            action = 'toggle',
-            toggle = true
-        })
-        hud = true
-    end
+    hud = not hud
+    SendNUIMessage({
+        action = 'toggle',
+        toggle = hud
+    })
 end)
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(1200)
-        if IsPauseMenuActive() and not IsPaused then
-            IsPaused = true
-            SendNUIMessage({
-                action = 'toggle',
-                toggle = true
-            })
-        elseif not IsPauseMenuActive() and IsPaused then
-            IsPaused = false
-            SendNUIMessage({
-                action = 'toggle',
-                toggle = false
-            })
-        end
-    end
-end)
-
-local spawn = false
 
 RegisterNetEvent('esx:playerLoaded', function()
     if not spawn then
         SendNUIMessage({
             action = 'show'
         })
-
+        
         startthread()
         updatecolors()
-
+        getJob()
+        
         spawn = true
-        print('a')
     end
 end)
 
@@ -144,7 +95,7 @@ function GetMinimapAnchor()
     local xscale = 1.0 / res_x
     local yscale = 1.0 / res_y
     local Minimap = {}
-
+    
     Minimap.width = xscale * (res_x / (4 * aspect_ratio))
     Minimap.height = yscale * (res_y / 5.674)
     Minimap.left_x = xscale * (res_x * (safezone_x * ((math.abs(safezone - 1.0)) * 10)))
@@ -155,34 +106,44 @@ function GetMinimapAnchor()
     Minimap.y = Minimap.top_y
     Minimap.xunit = xscale
     Minimap.yunit = yscale
-
+    
     return Minimap
 end
 
+function getJob()
+    SendNUIMessage({
+        action = "job",
+        job_label = ESX.PlayerData.job.label,
+        job_grade_label = ESX.PlayerData.job.grade_name
+    })
+end
+
+
+------- ONLINEJOBS -------
 if Config.EnableOnlinejobs then
-CreateThread(function()
-    while true do
-        Wait(700)
-
-        if NetworkIsPlayerActive(cache.playerId) then
-            TriggerServerEvent('Perri_OnlineJobs:server:load')
-            break
+    CreateThread(function()
+        while true do
+            Wait(700)
+            
+            if NetworkIsPlayerActive(cache.playerId) then
+                TriggerServerEvent('Perri_OnlineJobs:server:load')
+                break
+            end
         end
-    end
-end)
-
-RegisterNetEvent('Perri_OnlineJobs:client:load', function(jobs)
-    SendNUIMessage({
-        action = 'load',
-        jobs = jobs
-    })
-end)
-
-RegisterNetEvent('Perri_OnlineJobs:client:sync', function(jobs)
-    SendNUIMessage({
-        action = 'update',
-        jobs = jobs
-    })
-end)
+    end)
+    
+    RegisterNetEvent('Perri_OnlineJobs:client:load', function(jobs)
+        SendNUIMessage({
+            action = 'load',
+            jobs = jobs
+        })
+    end)
+    
+    RegisterNetEvent('Perri_OnlineJobs:client:sync', function(jobs)
+        SendNUIMessage({
+            action = 'update',
+            jobs = jobs
+        })
+    end)
 end
 
