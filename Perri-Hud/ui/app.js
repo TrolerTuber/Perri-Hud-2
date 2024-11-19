@@ -77,7 +77,6 @@ window.addEventListener('message', (e) => {
             }     
             
             if (data.armour > 0 && data.armour <= 100 && data.health > 0) {
-                console.log(Math.round(data.armour) + '%')
                 vsArmor.style.display = ''
                 Armor.style.height = Math.round(data.armour) + '%';
             } else {
