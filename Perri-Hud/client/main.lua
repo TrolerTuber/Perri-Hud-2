@@ -33,7 +33,7 @@ function startthread()
             })
             
             SendNUIMessage({
-                action = 'mapasi',
+                action = 'map',
                 mapa = not IsRadarHidden(),
                 anchor = GetMinimapAnchor()
             })
@@ -86,6 +86,7 @@ RegisterNetEvent('esx:playerLoaded', function()
     end
 end)
 
+
 function GetMinimapAnchor()
     local safezone = GetSafeZoneSize()
     local safezone_x = 1.0 / 20.0
@@ -116,34 +117,5 @@ function getJob()
         job_label = ESX.PlayerData.job.label,
         job_grade_label = ESX.PlayerData.job.grade_name
     })
-end
-
-
-------- ONLINEJOBS -------
-if Config.EnableOnlinejobs then
-    CreateThread(function()
-        while true do
-            Wait(700)
-            
-            if NetworkIsPlayerActive(cache.playerId) then
-                TriggerServerEvent('Perri_OnlineJobs:server:load')
-                break
-            end
-        end
-    end)
-    
-    RegisterNetEvent('Perri_OnlineJobs:client:load', function(jobs)
-        SendNUIMessage({
-            action = 'load',
-            jobs = jobs
-        })
-    end)
-    
-    RegisterNetEvent('Perri_OnlineJobs:client:sync', function(jobs)
-        SendNUIMessage({
-            action = 'update',
-            jobs = jobs
-        })
-    end)
 end
 

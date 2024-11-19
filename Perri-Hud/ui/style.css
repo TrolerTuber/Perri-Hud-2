@@ -12,25 +12,7 @@ body {
     overflow: hidden;
 }
 
-.container {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    
-    right: 1%;
-    bottom: 15%;
-    gap: .4vw;
-}
 
-
-.trabajos {
-    padding: .3vw;
-    box-shadow: 0 0 .3vw  rgb(2, 2, 2);
-    background: rgba(0, 0, 0, 0.432);
-
-    border-radius: .4vw;    
-    color: white;
-}
 
 span {
     margin-left: .6vw;
